@@ -1,0 +1,64 @@
+{
+  "name": "pokenats",
+  "version": "0.0.1",
+  "description": "Sample NATS Application",
+  "keywords": [
+    "nats",
+    "streaming",
+    "messaging",
+    "pubsub",
+    "publish",
+    "subscribe",
+    "queue",
+    "distributed",
+    "queueing"
+  ],
+  "homepage": "https://nats.io",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:aricart/pokenats.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aricart/pokenats/issues"
+  },
+  "private": false,
+  "author": {
+    "name": "Alberto Ricart",
+    "email": "alberto.ricart@apcera.com"
+  },
+  "contributors": [],
+  "main": "./index.js",
+  "scripts": {
+    "proxy": "node --expose_debug_as=v8debug $NODE_DEBUG_OPTION ./proxy/bin/www",
+    "trainer": "node ./trainer.js",
+    "invalid-message-service": "node ./invalid-message-service.js",
+    "trainer-data-service": "node ./trainer-data-service.js",
+
+    "lint": "jshint --reporter node_modules/jshint-stylish lib/*.js test/*.js test/support/*.js examples/*.js",
+    "depcheck": "dependency-check . lib/* lib/pb/*",
+    "depcheck:unused": "dependency-check ./package.json --unused --no-dev lib/*.js",
+    "test:unit": "mkdir -p reports/ && NODE_ENV=test multi='spec=- xunit=reports/mocha-xunit.xml' istanbul cover _mocha -- -R mocha-multi --timeout 10000 --slow 750 && istanbul check-coverage",
+    "test": "npm run depcheck && npm run depcheck:unused && npm run lint && npm run test:unit",
+    "coveralls": "cat ./reports/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+  },
+  "engines": {
+    "node": ">= .10.x"
+  },
+  "dependencies": {
+    "nats": ">= 0.6.4",
+    "nuid": ">= 0.6.8",
+    "node-nats-streaming": "https://github.com/nats-io/node-nats-streaming.git",
+    "express": "~4.13.4",
+    "cookie-parser": ">=1.4.3"
+  },
+  "devDependencies": {
+    "jshint": "2.9.x",
+    "jshint-stylish": "2.2.x",
+    "mocha": "2.5.x",
+    "mocha-multi": "0.9.x",
+    "mocha-lcov-reporter": "1.2.x",
+    "dependency-check": "2.5.x",
+    "istanbul": "0.4.x",
+    "should": ">= 9.0.0"
+  }
+}

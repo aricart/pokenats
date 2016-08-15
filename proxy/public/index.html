@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PokéNATS Sightings</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            height: 100%;
+        }
+    </style>
+    <script src="/js/grid.js"></script>
+</head>
+<body>
+<div id="map"></div>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"
+        integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+<script>
+    var myMarker = null;
+    var pokeMarkers = {};
+
+    function prune() {
+        var min = Date.now() - 25 * 1000;
+        for (var id in pokeMarkers) {
+            var m = pokeMarkers[id];
+            if (min > m._v.dob) {
+                console.log('deleting ' + m._v.id);
+                m.setMap(null);
+                delete pokeMarkers[id];
+            }
+        }
+    }
+
+    function newMarkerConf(lng, lat, map, icon, title) {
+        var c = {
+            position: new google.maps.LatLng(lat, lng),
+            map: map,
+            animation: google.maps.Animation.DROP
+        };
+        if (icon) {
+            c.icon = icon;
+        }
+        if (title) {
+            c.title = title;
+        }
+        return c;
+    }
+
+    function update() {
+        navigator.geolocation.getCurrentPosition(function (loc) {
+            var lng = loc.coords.longitude;
+            var lat = loc.coords.latitude;
+
+            $.ajax({
+                type: 'POST',
+                url: '/trainer/lat/' + lat + '/lng/' + lng,
+                dataType: 'json',
+                data: JSON.stringify({email: 'alberto.ricart@apcera.com'})
+            }).then(function (data) {
+                var icon = null;
+                var emailHash = new RegExp("trainerIcon=([^;]+)").exec(document.cookie);
+                if (emailHash) {
+                    emailHash = emailHash[1];
+                    icon = 'https://www.gravatar.com/avatar/' + emailHash + '.jpg?s=48';
+                }
+
+                if (myMarker === null) {
+                    var mc = newMarkerConf(lng, lat, map, icon);
+                    mc.zIndex = 1000;
+                    myMarker = new google.maps.Marker(mc);
+
+                } else {
+                    var pos = myMarker.getPosition();
+                    if (pos.lng() !== lng || pos.lat() !== lat) {
+                        var dlng = Math.abs(pos.lng() - lng);
+                        var dlat = Math.abs(pos.lat() - lat);
+                        if (dlng > 0.0001 || dlat > 0.0001) {
+                            myMarker.setPosition(new google.maps.LatLng(lat, lng));
+                        }
+                    }
+                }
+                prune();
+                var min = Date.now() - 15 * 1000;
+                $.each(data.genesis, function (index, value) {
+                        if (!pokeMarkers[value.id] && value.dob > min) {
+                            var zIndex = 600;
+                            var dir = '/images/60/';
+                            if(value.level < 50) {
+                                dir = '/images/16/';
+                                zIndex = 900;
+                            } else if(value.level < 100) {
+                                dir = '/images/30/';
+                                zindex = 800;
+                            } else if(value.level < 120) {
+                                dir = '/images/48/';
+                                zIndex = 700;
+                            }
+                            var icon = 'http://' + location.host + dir + value.name + '.png';
+                            var mc = newMarkerConf(value.location.lng, value.location.lat, map, icon, value.name);
+                            mc.zIndex = zIndex;
+                            var m = new google.maps.Marker(mc);
+                            m._v = value;
+                            pokeMarkers[value.id] = m;
+                        }
+                });
+            });
+        });
+    }
+    $(document).ready(function () {
+        setInterval(update, 5000);
+    });
+</script>
+
+<script>
+    var map;
+
+    poke.Grid.prototype.toLatLngBounds = function () {
+        var bounds = this.bounds();
+        return new google.maps.LatLngBounds(bounds.ll, bounds.ur);
+    };
+
+    function draw9Grid(g) {
+        drawGrid(g, '#FFFF00');
+        drawGrid(g.relative(-1, 1), '#00FFFF');
+        drawGrid(g.relative(0, 1), '#00FF00');
+        drawGrid(g.relative(1, 1), '#0000FF');
+
+        drawGrid(g.relative(-1, 0), '#FF00FF');
+        drawGrid(g.relative(1, 0), '#008080');
+
+        drawGrid(g.relative(-1, -1), '#800080');
+        drawGrid(g.relative(0, -1), '#000080');
+        drawGrid(g.relative(1, -1), '#808000');
+    }
+
+    function drawGrid(g, color) {
+//        if(g.gps) {
+//            new google.maps.Marker({position: g.gps, map: map, title: JSON.stringify(g.gps)});
+//        }
+
+        new google.maps.Rectangle({
+            strokeColor: color,
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: color,
+            fillOpacity: 0.35,
+            map: map,
+            bounds: g.toLatLngBounds()
+        });
+    }
+
+
+    function debugGrid(north, south, west, east) {
+        ll = {lat: south, lng: west};
+        ur = {lat: north, lng: east};
+
+        new google.maps.Marker({position: ll, map: map, text: JSON.stringify(ll)});
+        new google.maps.Marker({position: ur, map: map, text: JSON.stringify(ur)});
+
+        new google.maps.Rectangle({
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#000000',
+            fillOpacity: 0.35,
+            map: map,
+            bounds: new google.maps.LatLngBounds(ll, ur)
+        });
+    }
+
+    function initMap() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (loc) {
+                var coords = {lat: loc.coords.latitude, lng: loc.coords.longitude};
+//                var coords = {lat: -31.429357, lng: -64.185663};
+//                var coords = {lat: 51.4821832, lng: 0.022023};
+//                var coords = {lat: 51.4821832, lng: 50.022023};
+//                var coords = {lat: 0, lng: 0};
+//                console.log("coords", coords);
+
+                map = new google.maps.Map(document.getElementById('map'), {
+                    center: coords,
+                    zoom: 20,
+                    scaleControl: true
+                });
+
+//                var g1 = new poke.Grid(coords);
+//                draw9Grid(g1);
+            });
+        }
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCldROCPv3mlDclcgxEZN9zvCEI4ax8YUk&callback=initMap" async
+        defer></script>
+</body>
+</html>
