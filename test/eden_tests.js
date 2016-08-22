@@ -31,9 +31,12 @@ describe('Genesis', function() {
 
   it('should respond with new genesis', function(done) {
     var grid = new poke.Grid({lat: 0, lng: 0});
-    var es = new eden.Eden({});
+    var es = new eden.Eden({serviceType:'eden-service', client:nuid.next()});
     es.on('ready', function() {
       var nc = nats.connect(PORT);
+      es.nc.on('error', function(t) {
+        console.log('here');
+      });
       es.on('new', function(m) {
         should.exist(m.location);
         should.exist(m.id);

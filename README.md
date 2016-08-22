@@ -1,7 +1,20 @@
 # PokéNATS
 Simplistic PokemonGo Clone written using [NATS](http://nats.io) to demonstrate modern messaging patterns.
 
-### Notifications
+### Subjects
+
+`pokenats.<serviceType>.<id>.log.[info|error|invalid]`
+`pokenats.<serviceType>.<id>.[update|data|new|update|spawn].<grid>`
+
+Requests
+`pokenats_admin.[discover|kill|conf].<seviceType>.<id>
+
+Monitoring
+`pokenats_admin.<serviceType>.<id>.hb`
+
+
+
+
 
 ```
 pokenats
@@ -22,11 +35,8 @@ pokenats.log.<serviceType>.<id>.[error|info]
 
 ```
 
-`pokenats.<serviceType>.<id>.log.[info|error|invalid]`
-`pokenats.<serviceType>.<id>.hb`
-`pokenats.<serviceType>.<id>.[update|data|new|update|spawn].<grid>`
 
-`pokenats.<serviceType>.<id>.[discover|kill|conf].<grid>`
+
 
 
 

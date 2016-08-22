@@ -60,8 +60,7 @@
             $.ajax({
                 type: 'POST',
                 url: '/trainer/lat/' + lat + '/lng/' + lng,
-                dataType: 'json',
-                data: JSON.stringify({email: 'alberto.ricart@apcera.com'})
+                dataType: 'json'
             }).then(function (data) {
                 var icon = null;
                 var emailHash = new RegExp("trainerIcon=([^;]+)").exec(document.cookie);

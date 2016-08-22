@@ -14,25 +14,6 @@
     root.poke = poke;
   }
 
-  // Subject names
-  const BASE = 'pokenats.',
-  BAD_REQ = 'bad',
-  TRAINER_DATA_REQ = 'trainer.data',
-  NEW_TRAINER_REQ = 'trainer.new',
-  TRAINER_HB = 'trainer.hb',
-  TRAINER_GENESIS = 'trainer.genesis',
-  POKENAT_GENEIS = 'genesis';
-
-  poke.BAD_REQ = BASE + BAD_REQ;
-  poke.TRAINER_DATA_REQ = BASE + TRAINER_DATA_REQ;
-  poke.NEW_TRAINER_REQ = BASE + NEW_TRAINER_REQ;
-  poke.TRAINER_HB = BASE + TRAINER_HB;
-  poke.TRAINER_GENESIS = BASE + TRAINER_GENESIS;
-  poke.POKENATS_GENESIS = BASE + POKENAT_GENEIS;
-
-  poke.TRAINER_HB_INTERVAL = 5000;
-
-
   // Geometry Support
   var geo = {};
   geo.CIRCUMFERENCE_KM = 40000;

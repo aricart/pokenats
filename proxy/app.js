@@ -1,11 +1,13 @@
 var express = require('express'),
 cookieParser = require('cookie-parser'),
+bodyParser = require('body-parser'),
 path = require('path'),
 app = express(),
 fs = require('fs'),
 crypto = require('crypto'),
 trainer = require('../lib/Trainer'),
-nuid = require('nuid');
+nuid = require('nuid'),
+nats = require('nats');
 
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -13,7 +15,7 @@ nuid = require('nuid');
 // This gateway will never scale. Simply here for a test.
 var trainers = {};
 
-
+app.use(bodyParser());
 app.use('lib', express.static('../lib'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
@@ -35,13 +37,51 @@ setInterval(function() {
 }, 60*1000);
 
 
+var nc;
+
+app.all('/', function(req, res){
+  var id = req.cookies.trainerID;
+  var emailHash = req.cookies.emailHash;
+
+  if(!id || !emailHash) {
+    res.redirect('/login.html');
+  } else {
+    res.redirect('/map.html');
+  }
+});
+
+app.all('/register', function(req, res) {
+  var trainerID = req.cookies.trainerID || nuid.next();
+  var email = req.body.email || req.query.email;
+  var emailHash = crypto.createHash('md5').update(email).digest('hex').toLowerCase();
+  var opts = {client:trainerID, emailHash: emailHash};
+  var t = new trainer.Trainer(opts);
+  t.on('ready', function() {
+    res.cookie('trainerID', t.opts.client, {maxAge: 60*60*1000});
+    res.cookie('trainerIcon', t.opts.emailHash, {maxAge: 60*60*1000});
+    res.redirect('/map.html');
+    t.close();
+  });
+  t.connect();
+});
+
+
 app.all('/trainer/lat/:lat/lng/:lng', function(req, res) {
+  if(! req.cookies.trainerID || ! req.cookies.trainerIcon) {
+    res.redirect('/login.html');
+    res.send();
+    return;
+  }
+
   var opts = {location:{lat: parseFloat(req.params.lat), lng: parseFloat(req.params.lng)}, serviceType: 'trainer'};
   var trainerID = req.cookies.trainerID || nuid.next();
+  var emailHash = req.cookies.emailHash;
+
   var e;
   var t;
   if(trainerID) {
     opts.client = trainerID;
+    opts.emailHash = emailHash;
     e = trainers[trainerID];
     if(e && e.trainer) {
       t = e.trainer;
@@ -51,18 +91,6 @@ app.all('/trainer/lat/:lat/lng/:lng', function(req, res) {
     e = {genesis:[], energy:0};
   }
 
-  req.body = JSON.stringify({email:'alberto.ricart@apcera.com'});
-
-  if(req.body) {
-    try {
-      var body = JSON.parse(req.body);
-      if(body.email) {
-        e.emailHash = crypto.createHash('md5').update(body.email).digest('hex').toLowerCase();
-      }
-    } catch(err) {
-      console.log('error processing req body as json: ' + req.body);
-    }
-  }
 
   var done = function(t) {
     var id = t.opts.client;

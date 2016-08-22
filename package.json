@@ -49,7 +49,8 @@
     "nuid": ">= 0.6.8",
     "node-nats-streaming": "https://github.com/nats-io/node-nats-streaming.git",
     "express": "~4.13.4",
-    "cookie-parser": ">=1.4.3"
+    "cookie-parser": ">=1.4.3",
+    "body-parser": ">=1.15.2"
   },
   "devDependencies": {
     "jshint": "2.9.x",
