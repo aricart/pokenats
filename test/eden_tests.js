@@ -53,4 +53,27 @@ describe('Genesis', function() {
     });
     es.connect();
   });
+
+
+
+  it('bad request should fire bad request', function(done) {
+    var es = new eden.Eden({});
+    es.on('ready', function() {
+      var nc = nats.connect(PORT);
+      nc.on('connect', function () {
+        var subject = poke.makeSubject(poke.POKENATS, '*', '*', poke.LOG, poke.INVALID);
+        var ssid = nc.subscribe(subject, function (msg) {
+          var m = JSON.parse(msg);
+          should.exist(m);
+          nc.unsubscribe(ssid);
+          nc.close();
+          es.close();
+          done();
+        });
+      });
+      var req = {};
+      nc.publish(poke.TRAINER_GENESIS, JSON.stringify(req));
+    });
+    es.connect();
+  });
 });

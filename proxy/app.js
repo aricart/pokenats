@@ -75,6 +75,7 @@ app.all('/trainer/lat/:lat/lng/:lng', function(req, res) {
     e.last = Date.now();
     trainers[id] = e;
     var d = {genesis: e.genesis, energy: e.energy, id: id};
+    e.genesis = [];
     res.send(JSON.stringify(d));
   };
 

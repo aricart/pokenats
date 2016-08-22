@@ -12,6 +12,7 @@ nsc = require('./support/nats_server_control'),
 should = require('should'),
 tds = require('../lib/DataService'),
 trainer = require('../lib/Trainer'),
+eden = require('../lib/Eden'),
 path = require('path');
 
 describe('Basics', function() {
@@ -61,7 +62,7 @@ describe('Basics', function() {
     ts.connect();
   });
 
-  it('trainer shoiuld close', function(done) {
+  it('trainer should close', function(done) {
     var ts = new tds.TrainerDataService({dir: dataDir});
     ts.on('ready', function () {
       var t = new trainer.Trainer({});

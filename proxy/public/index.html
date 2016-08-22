@@ -26,7 +26,7 @@
     var pokeMarkers = {};
 
     function prune() {
-        var min = Date.now() - 25 * 1000;
+        var min = Date.now() - 45 * 1000;
         for (var id in pokeMarkers) {
             var m = pokeMarkers[id];
             if (min > m._v.dob) {
