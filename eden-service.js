@@ -53,8 +53,8 @@ var es = new eden.Eden(opts);
 es.connect();
 es.on('connect', function() {
   console.log('Connected.');
-  console.log('Monitoring on [' + base.monitoringSubject(opts.serviceType, opts.client) + ']');
-  console.log('Logging on [' + base.subjectBase(poke.POKENATS_LOG, opts.serviceType, opts.client) + ']');
+  console.log('Monitoring on [' + poke.makeSubject(poke.POKENATS, opts.serviceType, opts.client, poke.HB) + ']');
+  console.log('Logging on [' + poke.makeSubject(poke.POKENATS, opts.serviceType, opts.client, poke.LOG, '*') + ']');
 });
 
 es.on('error', function(error) {

@@ -23,7 +23,8 @@ pokenats.log.<serviceType>.<id>.[error|info]
 ```
 
 `pokenats.<serviceType>.<id>.log.[info|error|invalid]`
-`pokenats.<serviceType>.<id>.[hb|data|new|update|genesis].<grid>`
+`pokenats.<serviceType>.<id>.hb`
+`pokenats.<serviceType>.<id>.[update|data|new|update|genesis].<grid>`
 
 `pokenats.<serviceType>.<id>.[discover|kill|conf].<grid>`
 
