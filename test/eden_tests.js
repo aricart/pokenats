@@ -34,22 +34,17 @@ describe('Genesis', function() {
     var es = new eden.Eden({});
     es.on('ready', function() {
       var nc = nats.connect(PORT);
-      nc.on('connect', function () {
-        var ssid = nc.subscribe(poke.POKENATS_GENESIS + '.' + grid.index, function (msg) {
-          var m = JSON.parse(msg);
-          should.exist(m.location);
-          should.exist(m.id);
-          should.exist(m.dob);
-          should.exist(m.name);
-          should.exist(m.level);
-          nc.unsubscribe(ssid);
-          nc.close();
-          es.close();
-          done();
-        });
+      es.on('new', function(m) {
+        should.exist(m.location);
+        should.exist(m.id);
+        should.exist(m.dob);
+        should.exist(m.name);
+        should.exist(m.level);
+        done();
       });
       var req = {client: nuid.next(), location: grid.gps};
-      nc.publish(poke.TRAINER_GENESIS, JSON.stringify(req));
+      var trainerSpawn = poke.makeSubject(poke.POKENATS, 'trainer', nuid.next(), poke.SPAWN, grid.index);
+      nc.publish(trainerSpawn, JSON.stringify(req));
     });
     es.connect();
   });
@@ -72,7 +67,8 @@ describe('Genesis', function() {
         });
       });
       var req = {};
-      nc.publish(poke.TRAINER_GENESIS, JSON.stringify(req));
+      var rsubj = poke.makeSubject(poke.POKENATS, 'fake-trainer', nuid.next(), poke.SPAWN, 12);
+      nc.publish(rsubj, JSON.stringify(req));
     });
     es.connect();
   });
