@@ -4,7 +4,7 @@ Simplistic PokemonGo Clone written using [NATS](http://nats.io) to demonstrate m
 ### Subjects
 
 `pokenats.<serviceType>.<id>.log.[info|error|invalid]`
-`pokenats.<serviceType>.<id>.[update|data|new|update|spawn].<grid>`
+`pokenats.<serviceType>.<id>.[update|data|new|spawn].<grid>`
 
 Requests
 `pokenats_admin.[discover|kill|conf].<seviceType>.<id>`
