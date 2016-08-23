@@ -7,10 +7,10 @@ Simplistic PokemonGo Clone written using [NATS](http://nats.io) to demonstrate m
 `pokenats.<serviceType>.<id>.[update|data|new|update|spawn].<grid>`
 
 Requests
-`pokenats_admin.[discover|kill|conf].<seviceType>.<id>
+`pokenats_admin.[discover|kill|conf].<seviceType>.<id>`
 
 Monitoring
-`pokenats_admin.<serviceType>.<id>.hb`
+`pokenats_monitor.<serviceType>.<id>.hb`
 
 
 
