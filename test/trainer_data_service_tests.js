@@ -8,6 +8,7 @@
 
 var poke = require('../lib/common.js'),
 nats = require('nats'),
+nuid = require('nuid'),
 nsc = require('./support/nats_server_control'),
 should = require('should'),
 tds = require('../lib/DataService'),
@@ -36,7 +37,9 @@ describe('Basics', function() {
     var ts = new tds.TrainerDataService({dir: dataDir});
     ts.on('ready', function() {
       var m = {};
-      ts.nc.request(poke.TRAINER_DATA_REQ, JSON.stringify(m), {max:1}, function(msg) {
+      var id = nuid.next();
+      var subj = poke.makeSubject(poke.POKENATS, 'trainer', id, 'data');
+      ts.nc.request(subj, JSON.stringify(m), {max:1}, function(msg) {
         msg = JSON.parse(msg);
         should.exist(msg.client);
         should.exist(msg.inventory);
@@ -50,8 +53,10 @@ describe('Basics', function() {
   it('should respond to trainer data request', function(done) {
     var ts = new tds.TrainerDataService({dir: dataDir});
     ts.on('ready', function () {
-      var m = {client: '6QXNM4EVHHZ18C3TEUZHK3'};
-      ts.nc.request(poke.TRAINER_DATA_REQ, JSON.stringify(m), {max: 1}, function (msg) {
+      var id = '6QXNM4EVHHZ18C3TEUZHK3';
+      var subj = poke.makeSubject(poke.POKENATS, 'trainer', id, 'data');
+      var m = {client: id};
+      ts.nc.request(subj, JSON.stringify(m), {max: 1}, function (msg) {
         msg = JSON.parse(msg);
         should.exist(msg.client);
         should.exist(msg.inventory);

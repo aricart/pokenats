@@ -185,7 +185,23 @@
                 map = new google.maps.Map(document.getElementById('map'), {
                     center: coords,
                     zoom: 20,
-                    scaleControl: true
+                    scaleControl: true,
+                    styles: [
+                        {
+                            "featureType": "all",
+                            "elementType": "labels.text",
+                            "stylers": [
+                                { "visibility": "off" }
+                            ]
+                        },
+                        {
+                            "featureType": "poi",
+                            "elementType": "labels",
+                            "stylers": [
+                                { "visibility": "off" }
+                            ]
+                        }
+                    ]
                 });
 
 //                var g1 = new poke.Grid(coords);
