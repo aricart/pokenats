@@ -59,7 +59,7 @@ describe('Genesis', function() {
     es.on('ready', function() {
       var nc = nats.connect(PORT);
       nc.on('connect', function () {
-        var subject = poke.makeSubject(poke.POKENATS, '*', '*', poke.LOG, poke.INVALID);
+        var subject = poke.makeSubject(poke.POKENATS_MONITOR, '*', '*', poke.LOG, poke.INVALID);
         var ssid = nc.subscribe(subject, function (msg) {
           var m = JSON.parse(msg);
           should.exist(m);
