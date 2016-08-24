@@ -37,7 +37,6 @@ describe('Grid', function() {
 
   it('should be grid.width + grid.width * grid.height', function() {
     var grid = new poke.Grid({lat:0, lng:0});
-
     grid.index.should.be.equal((poke.geo.GRID_WIDTH * poke.geo.GRID_HEIGHT)/2);
   });
 
@@ -89,6 +88,13 @@ describe('Grid', function() {
     var grid = new poke.Grid({lat:90, lng:180});
     var up = grid.relative(0, 1);
     up.y.should.be.equal(grid.y);
+  });
+
+  it('coords should be similar', function() {
+    var g = new poke.Grid({lat:44.929114, lng:-92.891305});
+    var index = g.index;
+    var g2 = poke.gridFromIndex(index);
+    g2.index.should.be.equal(g.index);
   });
 });
 

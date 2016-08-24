@@ -10,7 +10,6 @@
             margin: 0;
             padding: 0;
         }
-
         #map {
             height: 100%;
         }
@@ -139,9 +138,9 @@
     }
 
     function drawGrid(g, color) {
-//        if(g.gps) {
-//            new google.maps.Marker({position: g.gps, map: map, title: JSON.stringify(g.gps)});
-//        }
+        if(g.gps) {
+            new google.maps.Marker({position: g.gps, map: map, title: JSON.stringify(g.gps)});
+        }
 
         new google.maps.Rectangle({
             strokeColor: color,
