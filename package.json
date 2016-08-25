@@ -32,7 +32,7 @@
     "proxy": "node --expose_debug_as=v8debug $NODE_DEBUG_OPTION ./proxy/bin/www",
     "trainer": "node ./trainer.js",
     "control": "node ./control.js",
-    "invalid-message-service": "node ./invalid-message-service.js",
+    "invalid-message-service": "node ./invalid-message.js",
     "trainer-data-service": "node ./trainer-data-service.js",
     "lint": "jshint --reporter node_modules/jshint-stylish lib/*.js test/*.js test/support/*.js examples/*.js",
     "depcheck": "dependency-check . lib/* lib/pb/*",
