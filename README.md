@@ -51,7 +51,6 @@ Most PokéNATS services publish messages a JSON payload. Some messages don't req
 
 ## Trainer Data Service
 The Trainer Data Service is a simple request-reply service. It provides an unique identifier to a trainer, and stores an email value on disk. It subscribes to `pokenats.trainer.<id>.data` requests, which it responds to the inbox of the client making the request.
-__>>>>>>>>FIXME: code not currently using correct subject<<<<<<<<<<<<__
 
 ## The Eden Service
 The Eden Service subscribes to `pokenats.trainer.<id>.spawn.<grid>`, an in return publishes a `pokenats.trainer.<id>.new.<grid>`. This is similar to a request-reply service, with the exception that the response is published to a well known subjects. This way other trainers are able to see where a PokéNATS spawns nearby.
