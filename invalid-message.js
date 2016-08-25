@@ -23,7 +23,7 @@
  */
 
 const NATS = require('nats'),
-poke = require('./lib/common'),
+poke = require('./lib/Common'),
 util = require('util'),
 nuid = require('nuid'),
 events = require('events'),
