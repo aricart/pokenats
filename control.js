@@ -11,7 +11,7 @@ nuid = require('nuid');
 var args = process.argv.slice(2);
 var queue_group = getFlagValue('-q') || undefined;
 var client_id = getFlagValue('-id') || nuid.next();
-var server = getFlagValue('-s') || undefined;
+var uri = getFlagValue('-s') || undefined;
 var dir = getFlagValue('-d') || __dirname;
 
 function getFlagValue(k) {
@@ -24,6 +24,7 @@ function getFlagValue(k) {
 }
 
 console.log('PokéNATS Control Service');
+
 var opts = {serviceType: 'service-control'};
 
 if(client_id) {
@@ -31,9 +32,14 @@ if(client_id) {
   console.log('Using client id: [' + client_id + ']');
 }
 
-if(server) {
-  opts.server = server;
-  console.log('Connecting to server(s): [' + server + ']');
+if(uri) {
+  opts.uri = uri;
+  console.log('Connecting to server(s): [' + uri + ']');
+}
+
+if(process.env.NATS_URI) {
+  opts.uri = process.env.NATS_URI;
+  console.log('Connecting to server(s): [' + uri + ']');
 }
 
 if(queue_group){

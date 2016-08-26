@@ -55,6 +55,9 @@ app.all('/register', function(req, res) {
   var email = req.body.email || req.query.email;
   var emailHash = crypto.createHash('md5').update(email).digest('hex').toLowerCase();
   var opts = {client:trainerID, emailHash: emailHash};
+  if(process.env.NATS_URI) {
+    opts.uri = process.env.NATS_URI;
+  }
   var t = new trainer.Trainer(opts);
   t.on('ready', function() {
     res.cookie('trainerID', t.opts.client, {maxAge: 60*60*1000});
@@ -74,6 +77,9 @@ app.all('/trainer/lat/:lat/lng/:lng', function(req, res) {
   }
 
   var opts = {location:{lat: parseFloat(req.params.lat), lng: parseFloat(req.params.lng)}, serviceType: 'trainer'};
+  if(process.env.NATS_URI) {
+    opts.uri = process.env.NATS_URI;
+  }
   var trainerID = req.cookies.trainerID || nuid.next();
   var emailHash = req.cookies.emailHash;
 

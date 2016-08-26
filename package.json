@@ -29,9 +29,10 @@
   "contributors": [],
   "main": "./index.js",
   "scripts": {
-    "proxy": "node --expose_debug_as=v8debug $NODE_DEBUG_OPTION ./proxy/bin/www",
+    "proxy": "node ./proxy/bin/www",
+    "pxy": "node --expose_debug_as=v8debug $NODE_DEBUG_OPTION ./proxy/bin/www",
     "trainer": "node ./trainer.js",
-    "control": "node ./control.js",
+    "start": "node ./control.js",
     "invalid-message-service": "node ./invalid-message.js",
     "trainer-data-service": "node ./trainer-data-service.js",
     "lint": "jshint --reporter node_modules/jshint-stylish lib/*.js test/*.js test/support/*.js examples/*.js",
@@ -40,9 +41,6 @@
     "test:unit": "mkdir -p reports/ && NODE_ENV=test multi='spec=- xunit=reports/mocha-xunit.xml' istanbul cover _mocha -- -R mocha-multi --timeout 10000 --slow 750 && istanbul check-coverage",
     "test": "npm run depcheck && npm run depcheck:unused && npm run lint && npm run test:unit",
     "coveralls": "cat ./reports/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
-  },
-  "engines": {
-    "node": ">= .10.x"
   },
   "dependencies": {
     "nats": ">= 0.6.4",

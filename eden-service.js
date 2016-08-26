@@ -11,7 +11,7 @@ var path = require('path'),
 var args = process.argv.slice(2);
 var client_id = getFlagValue('-id') || nuid.next();
 var cluster_id = getFlagValue('-cluster') || 'test-cluster';
-var server = getFlagValue('-s') || undefined;
+var uri = getFlagValue('-s') || undefined;
 var queue_group = getFlagValue('-q') || undefined;
 var stream = getFlagValue('-stream') || false;
 
@@ -32,10 +32,14 @@ if(client_id) {
   console.log('Using client id: [' + client_id + ']');
 }
 
+if(uri) {
+  opts.uri = uri;
+  console.log('Connecting to server(s): [' + uri + ']');
+}
 
-if(server) {
-  opts.server = server;
-  console.log('Connecting to server(s): [' + server + ']');
+if(process.env.NATS_URI) {
+  opts.uri = process.env.NATS_URI;
+  console.log('Connecting to server(s): [' + uri + ']');
 }
 
 if(queue_group) {
