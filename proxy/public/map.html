@@ -99,7 +99,7 @@
                                 dir = '/images/48/';
                                 zIndex = 700;
                             }
-                            var icon = 'http://' + location.host + dir + value.name + '.png';
+                            var icon = window.location.protocol + '//' + window.location.host + dir + value.name + '.png';
                             var mc = newMarkerConf(value.location.lng, value.location.lat, map, icon, value.name);
                             mc.zIndex = zIndex;
                             var m = new google.maps.Marker(mc);
