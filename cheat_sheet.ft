@@ -1,0 +1,12 @@
+# Cheat Sheet
+
+
+  __Speed up heartbeats__
+    nats-pub pokenats_admin.conf.trainer "{\"op\": \"trainer.heartbeat.interval\", \"opValue\": 2000}"
+
+  __Speed up kill eden__
+    nats-pub pokenats_admin.kill.eden-service ""
+
+__Discover Services__
+nats-req pokenats_admin.discover.eden-service ""
+

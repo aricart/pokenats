@@ -1,0 +1,51 @@
+@startuml
+
+skinparam participantFontName Helvetica
+skinparam participantFontColor white
+skinparam participantFontSize 24
+skinparam participantFontStyle Bold
+skinparam participantBorderColor white
+
+skinparam sequenceBoxLineColor white
+skinparam sequenceBoxBackgroundColor lightgray
+
+
+participant HTTP #27AAE0
+participant Proxy #34A474
+participant "Trainer*" #375C92
+
+HTTP -> Proxy: login
+box "Web Proxy"
+    participant Proxy
+    participant "Trainer*"
+end box
+activate Proxy
+Proxy -> "Trainer*"
+activate "Trainer*"
+participant "Data Service" #8DC53E
+"Trainer*" -> "Data Service": Trainer data? (Request/Reply)
+activate "Data Service"
+"Trainer*" <-- "Data Service": Trainer data
+deactivate "Data Service"
+"Proxy" <- "Trainer*": Trainer data
+HTTP <- Proxy: Trainer data
+|||
+|||
+HTTP -> Proxy: Location update
+Proxy -> "Trainer*": Location update
+activate "Trainer*"
+"Trainer*" --> "Trainer*": Location update (Publish)
+
+participant Eden #27AAE0
+"Trainer*" --> Eden: Spawn new? (Publish)
+activate Eden
+"Trainer*" <-- Eden: New
+deactivate Eden
+deactivate "Trainer*"
+Proxy <- "Trainer*": Location update
+HTTP <- Proxy: Location update
+deactivate "Trainer*"
+deactivate Proxy
+
+
+@enduml
