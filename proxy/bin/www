@@ -20,7 +20,7 @@ var credentials = {key: privateKey, cert: certificate};
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort('8080');
+var port = normalizePort('80');
 app.set('port', port);
 
 /**
@@ -39,7 +39,7 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 
-httpsServer.listen(8443);
+httpsServer.listen(443);
 
 
 /**
