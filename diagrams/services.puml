@@ -1,8 +1,0 @@
-@startuml
-
-"Process Controller" -> Process: discover?
-"Process Controller" <-- Process: type and id
-
-
-
-@enduml
