@@ -32,6 +32,11 @@
     "proxy": "node ./proxy/bin/www",
     "pxy": "node --expose_debug_as=v8debug $NODE_DEBUG_OPTION ./proxy/bin/www",
     "trainer": "node ./trainer.js",
+    "stjohns": "node ./trainer.js -lat 44.927787 -lng -92.892631 -id stjohns",
+    "lake": "node ./trainer.js -lat 44.92.8951 -lng -92.890140 -id lake",
+    "dancingwaters": "node ./trainer.js -lat 44.928125 -lng -92.886414 -id dancingwaters",
+    "park": "node ./trainer.js -lat 44.92941 -lng -92.89390 -id park",
+
     "start": "node ./control.js",
     "invalid-message-service": "node ./invalid-message.js",
     "trainer-data-service": "node ./trainer-data-service.js",
