@@ -28,10 +28,21 @@ npm run proxy > /dev/null 2>&1 &
 
 # Tools
 
-node trainer_counter.js -s nats://54.244.197.148:4222
-node pokenats_counter -s nats://54.244.197.148:4222
+https://54.149.51.248/login.html
+export AWS=54.149.51.248
 
-nats-sub -s nats://54.244.197.148:4222 "pokenats.eden-service.>"
-nats-sub -s nats://54.244.197.148:4222 "pokenats_monitor.*.*.hb"
+
+node trainer_counter.js -s nats://$AWS:4222
+node pokenats_counter -s nats://$AWS:4222
+
+nats-sub -s nats://$AWS:4222 "pokenats.eden-service.>"
+nats-sub -s nats://$AWS:4222 "pokenats_monitor.*.*.hb"
+
+nats-pub -s nats://$AWS:4222 "pokenats_admin.conf.trainer.*" "{\"trainer.heartbeat.interval\": 1000}"
+
+npm run stjohns -s nats://$AWS:4222 > /dev/null 2>&1 &
+npm run lake -s nats://$AWS:4222 > /dev/null 2>&1 &
+npm run dancingwaters -s nats://$AWS:4222 > /dev/null 2>&1 &
+npm run park  -s nats://$AWS:4222 > /dev/null 2>&1 &
 
 
